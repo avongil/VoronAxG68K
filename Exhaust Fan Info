@@ -1,0 +1,33 @@
+#####################################################################
+#    Chamber Temperature Fan - for auto cooling
+#####################################################################
+
+
+[temperature_fan chamber]
+pin: PC0
+max_power: 1.0
+shutdown_speed: 0.0
+kick_start_time: 5.0
+cycle_time:0.07
+off_below:.5
+sensor_type: EPCOS 100K B57560G104F
+sensor_pin: PC2
+min_temp: 0
+max_temp: 80
+target_temp: 73
+control: watermark
+max_delta: 2.0
+gcode_id: C
+
+[gcode_macro M141]
+
+gcode:
+    SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=35
+    
+    
+    
+###W here 73 is a temp where the fan will go on regardless if M141 has been issued.  actual is 73+2 since delta is 2 and control is watermark aka on-off not PID
+###35 deg will activate the fan when M141 has been issued - so you can throw the M141 at the end of your program or in the end macro.
+###  caveot
+###  the starting gcode should have SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=73 in it to reset this..
+### The klipper docs to getting that variable in there I am not understanding. This will have to do for now untill I get smarter. 
