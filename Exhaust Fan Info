@@ -1,3 +1,15 @@
+##The goal is to have the chamber fan turn on regardless of operating mode to prevent machine from reaching E-Stop @ 80 Deg chamber temp. 
+###Not likley, but hey thats how it should be done.
+
+### 73 is a temp where the fan will go on regardless if M141 has been issued.  actual is 73+2 since delta is 2 and control is watermark aka on-off not PID
+### above 35+2 deg will activate the fan when M141 has been issued - so you can throw the M141 at the end of your program or in the end macro.
+###  caveot
+###  the starting gcode should have SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=73 in it to reset this..
+### The klipper docs to getting that variable in there I am not understanding. This will have to do for now untill I get smarter. 
+
+
+
+
 #####################################################################
 #    Chamber Temperature Fan - for auto cooling
 #####################################################################
@@ -24,15 +36,6 @@ gcode_id: C
 gcode:
     SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=35
     
-    
-    
-###W here 73 is a temp where the fan will go on regardless if M141 has been issued.  actual is 73+2 since delta is 2 and control is watermark aka on-off not PID
-###35 deg will activate the fan when M141 has been issued - so you can throw the M141 at the end of your program or in the end macro.
-###  caveot
-###  the starting gcode should have SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=73 in it to reset this..
-### The klipper docs to getting that variable in there I am not understanding. This will have to do for now untill I get smarter. 
-
-
 
 [gcode_macro PRINT_START]
 #   Use PRINT_START for the slicer starting script - please customise for your slicer of choice
