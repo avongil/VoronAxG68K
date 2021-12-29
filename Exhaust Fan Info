@@ -31,3 +31,17 @@ gcode:
 ###  caveot
 ###  the starting gcode should have SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=73 in it to reset this..
 ### The klipper docs to getting that variable in there I am not understanding. This will have to do for now untill I get smarter. 
+
+
+
+[gcode_macro PRINT_START]
+#   Use PRINT_START for the slicer starting script - please customise for your slicer of choice
+gcode:
+    G32                            ; home all axes
+    G1 Z20 F3000                   ; move nozzle away from bed 
+    ###resets exhaust fan auto on temp to 73 deg. This can be thought of a saftey for max chamber before machine goes into e-stop @ 80 deg
+    SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=73 
+
+
+
+
