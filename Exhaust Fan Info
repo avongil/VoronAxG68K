@@ -1,4 +1,7 @@
-##The goal is to have the chamber fan turn on regardless of operating mode to prevent machine from reaching E-Stop @ 80 Deg chamber temp. 
+###METHOD 1 The goal is to have a super simple chamber fan setup and control as well as explain to the new klipper user how to set up the fans initially with the generic_fan
+###this method turns the fan on at the end of the print and uses the timeout section to automatically turn them off regardless of operating mode.
+
+##METHOD 2 The goal is to have the chamber fan turn on regardless of operating mode to prevent machine from reaching E-Stop @ 80 Deg chamber temp. 
 ###Not likley, but hey thats how it should be done.
 
 ### 73 is a temp where the fan will go on regardless if M141 has been issued.  actual is 73+2 since delta is 2 and control is watermark aka on-off not PID
@@ -50,8 +53,8 @@ gcode:
 #   commands. The default is 600 seconds.
 timeout: 1800
 gcode:
-#   A list of G-Code commands to execute on an idle timeout.
-SET_FAN_SPEED FAN=Manual_Exhaust_Fan SPEED=0
+#   A list of G-Code commands to execute on an idle timeout.  Must be indented. 
+ SET_FAN_SPEED FAN=Manual_Exhaust_Fan SPEED=0
 
 ################################ END  METHOD #1 - SIMPLE TIMEOUT ######################
 
@@ -113,7 +116,7 @@ gcode:
     ### resets exhaust fan auto on temp to 75 deg. (73+2) This can be thought of as a saftey for max chamber before machine goes into e-stop @ 80 deg ###
     SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=73 
 
-################################  METHOD #2 - CHAMBER TEMP CONTROLLED  ###############################
+################################  END METHOD #2 - CHAMBER TEMP CONTROLLED  ###############################
 
 
 
