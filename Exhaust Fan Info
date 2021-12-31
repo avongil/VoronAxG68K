@@ -8,10 +8,12 @@
 ### The klipper docs to getting that variable in there I am not understanding. This will have to do for now untill I get smarter. 
 
 
+################################  METHOD #1 - SIMPLE TIMEOUT ###############################
 
+################################  METHOD #2 - CHAMBER TEMP CONTROLLED ######################
 
 #####################################################################
-#    Chamber Temperature Fan - for auto cooling
+#    Chamber Temperature Fan - for auto cooling @ print end
 #####################################################################
 
 
@@ -32,9 +34,27 @@ max_delta: 2.0
 gcode_id: C
 
 [gcode_macro M141]
-
 gcode:
     SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=35
+    
+    
+ #####   Notes:  PRINT_START and PRINT_END sections should be update. Alternatley you can just set these commands to post out in your slicer. 
+ 
+[gcode_macro PRINT_END]
+#   Use PRINT_END for the slicer ending script - please customise for your slicer of choice
+gcode:
+    M400                           ; wait for buffer to clear
+    G92 E0                         ; zero the extruder
+    G1 E-10.0 F3600                ; retract filament
+    G91                            ; relative positioning
+    G0 Z30.00 X20.0 Y20.0 F20000    ; move nozzle to remove stringing
+    TURN_OFF_HEATERS
+    M107                           ; turn off fan
+    G1 Z2 F3000                    ; move nozzle up 2mm
+    G90                            ; absolute positioning
+    G0  X125 Y250 F3600            ; park nozzle at rear
+    BED_MESH_CLEAR
+    M141                           ; turn on auto exhaust fan and set to low temp mode. <--  this line added for exhaust fan
     
 
 [gcode_macro PRINT_START]
@@ -42,8 +62,48 @@ gcode:
 gcode:
     G32                            ; home all axes
     G1 Z20 F3000                   ; move nozzle away from bed 
-    ###resets exhaust fan auto on temp to 73 deg. This can be thought of a saftey for max chamber before machine goes into e-stop @ 80 deg
+    ### resets exhaust fan auto on temp to 75 deg. (73+2) This can be thought of as a saftey for max chamber before machine goes into e-stop @ 80 deg ###
     SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=73 
+
+################################  METHOD #2 - CHAMBER TEMP CONTROLLED  ###############################
+
+
+
+
+
+
+################################    other methods ###############################
+
+
+#####################################################################
+#	MANUAL Fan Control (with button on web interface)
+#####################################################################
+
+### Below used to test fan functionality
+
+#[fan_generic PrintCool_PB6] #Print Cooling Fan
+#pin: PC0
+#max_power:1.0
+#shutdown_speed:.5
+#cycle_time:.07
+#hardware_pwm:false
+#kick_start_time:.5
+#off_below:.5
+##   See the "fan" section for a description of the above parameters.
+
+#####################################################################
+#	Chamber Temperature SENSOR ONLY - no fan control
+#####################################################################
+#[temperature_sensor chamber]
+#sensor_type: EPCOS 100K B57560G104F
+#### notused ##pullup_resistor: 10000
+#sensor_pin: PC2
+#min_temp: 0
+#max_temp: 100
+#gcode_id: C
+################################  END SENSOR ONLY ###############################
+
+
 
 
 
