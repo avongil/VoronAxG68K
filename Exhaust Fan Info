@@ -10,6 +10,56 @@
 
 ################################  METHOD #1 - SIMPLE TIMEOUT ###############################
 
+#####################################################################
+#	MANUAL Fan Control (with button on web interface) + AUTO TIMEOUT
+#####################################################################
+
+### Below used to test fan functionality or set up a manual fan
+
+[fan_generic Manual_Exhaust_Fan] #Exhaust / Chamber Cooling Fan
+pin: PB0
+max_power:1.0
+shutdown_speed:0.0
+cycle_time:.07
+hardware_pwm:false
+kick_start_time:1.0
+off_below:.5
+##   See the "fan" section for a description of the above parameters.
+
+### ADD FAN ON LINE TO THE PRINT_END SECTION OF YOUR PRINTER CONFIG
+
+[gcode_macro PRINT_END]
+#   Use PRINT_END for the slicer ending script - please customise for your slicer of choice
+gcode:
+    M400                           ; wait for buffer to clear
+    G92 E0                         ; zero the extruder
+    G1 E-10.0 F3600                ; retract filament
+    G91                            ; relative positioning
+    G0 Z30.00 X20.0 Y20.0 F20000    ; move nozzle to remove stringing
+    TURN_OFF_HEATERS
+    M107                           ; turn off fan
+    G1 Z2 F3000                    ; move nozzle up 2mm
+    G90                            ; absolute positioning
+    G0  X125 Y250 F3600            ; park nozzle at rear
+    BED_MESH_CLEAR
+    SET_FAN_SPEED FAN=Manual_Exhaust_Fan SPEED=1.0    ;<---  turn on exhaust fan to max speed. It will be turned off by the timout section.
+
+###   ADD FAN OFF LINE TO THE TIMEOUT SECTION OF YOUR PINTER CONFIG
+      ### this could be added to your print end as a dwell in g-code but this does not dellay the end of print. 
+      
+[idle_timeout]
+#   Idle time (in seconds) to wait before running the above G-Code
+#   commands. The default is 600 seconds.
+timeout: 1800
+gcode:
+#   A list of G-Code commands to execute on an idle timeout.
+SET_FAN_SPEED FAN=Manual_Exhaust_Fan SPEED=0
+
+################################ END  METHOD #1 - SIMPLE TIMEOUT ######################
+
+
+
+
 ################################  METHOD #2 - CHAMBER TEMP CONTROLLED ######################
 
 #####################################################################
@@ -79,9 +129,9 @@ gcode:
 #	MANUAL Fan Control (with button on web interface)
 #####################################################################
 
-### Below used to test fan functionality
+### Below used to test fan functionality or set up a manual fan
 
-#[fan_generic PrintCool_PB6] #Print Cooling Fan
+#[fan_generic Exhaust_Fan] #Exhaust / Chamber Cooling Fan
 #pin: PC0
 #max_power:1.0
 #shutdown_speed:.5
@@ -105,6 +155,29 @@ gcode:
 
 
 
+#####################################           GENERAL  NOTES ON FANS           ###################################
+########### all fans need to be tested first in order to figure out what the minimum requirements are to make them spin up and work.
+########### 100% - NO PWM should make them jump to life. The minimum PWM cfrequency needs to be figured out as well as the minimum 
+########### Power for that particular fan you installed.  I found that some fans required as high as .07 cycle time to remainin spinning at 
+########### power levels bellow 50%.   .1 cycle time produces noticable audible fluctuations. 
+###  the below code for the config places a button on the fan section of the web interface. It is very easy to cycle on and off the fan like this.
+###  commented out sections not needed.
 
+#####################################################################
+#	Fan Control
+#####################################################################
 
+### Below used to test fan functionality
 
+[fan_generic PrintCool_PB6] #Print Cooling Fan
+pin: PB6
+max_power:1.0
+#shutdown_speed:
+cycle_time:.01
+hardware_pwm:false
+kick_start_time:.5
+off_below:.3
+#tachometer_pin:
+#tachometer_ppr:
+#tachometer_poll_interval:
+#   See the "fan" section for a description of the above parameters.
