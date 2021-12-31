@@ -14,16 +14,14 @@
 #	MANUAL Fan Control (with button on web interface) + AUTO TIMEOUT
 #####################################################################
 
-### Below used to test fan functionality or set up a manual fan
-
 [fan_generic Manual_Exhaust_Fan] #Exhaust / Chamber Cooling Fan
-pin: PB0
-max_power:1.0
+pin: PB0 ;<- your fan pin here, see board docs.
+max_power:1.0 
 shutdown_speed:0.0
-cycle_time:.07
+cycle_time:.07 ;<- increase if fan does not keep spinning, decrease if pulsating
 hardware_pwm:false
-kick_start_time:1.0
-off_below:.5
+kick_start_time:1.0 ;<- Initial jolt of 100% power to make blades spin in seconds
+off_below:.5 ;<- minimum pwm cycle that makes the fan work - web interface button follows this.
 ##   See the "fan" section for a description of the above parameters.
 
 ### ADD FAN ON LINE TO THE PRINT_END SECTION OF YOUR PRINTER CONFIG
