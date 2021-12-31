@@ -85,8 +85,10 @@ max_delta: 2.0
 gcode_id: C
 
 [gcode_macro M141]
+
 gcode:
-    SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=35
+   #SET_FAN_SPEED FAN=Manual_Exhaust_Fan SPEED=0                  ;METHOD 1
+    SET_TEMPERATURE_FAN_TARGET temperature_fan=chamber target=35  ;METHOD 2
     
     
  #####   Notes:  PRINT_START and PRINT_END sections should be update. Alternatley you can just set these commands to post out in your slicer. 
