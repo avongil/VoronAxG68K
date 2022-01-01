@@ -128,7 +128,15 @@ gcode:
 
 
 ################################    other methods ###############################
-
+## - you can combine methods one and two above - temperature control + time + manual button or any combination of them.
+####  [duplicate_pin_override] 
+##Klipper 0.10.0
+##Available on 20210929
+#[duplicate_pin_override] <--- this is the code
+#pins:PB4   <---  this is the code
+#   A comma separated list of pins that may be used multiple times in
+#   a config file without normal error checks. This parameter must be
+#   provided.
 
 #####################################################################
 #	MANUAL Fan Control (with button on web interface)
