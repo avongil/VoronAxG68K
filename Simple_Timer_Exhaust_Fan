@@ -1,0 +1,32 @@
+### *** Add the following lines for simple timout based chamber fan control at end of print *** ###
+
+#####################################################################
+#	MANUAL Fan Control (with button on web interface) + AUTO TIMEOUT
+#####################################################################
+[fan_generic Manual_Exhaust_Fan] #Exhaust / Chamber Cooling Fan
+pin: PB4 ;<- your fan pin here, see board docs.
+max_power:1.0 
+shutdown_speed:0.0
+cycle_time:.07 ;<- increase if fan does not keep spinning, decrease if pulsating
+hardware_pwm:false
+kick_start_time:1.0 ;<- Initial jolt of 100% power to make blades spin in seconds
+off_below:.5 ;<- minimum pwm cycle that makes the fan work - web interface button follows this.
+
+
+#####################################################################
+#	Homing and Gantry Adjustment Routines
+#####################################################################
+[idle_timeout]
+#   Idle time (in seconds) to wait before running the above G-Code
+#   commands. The default is 600 seconds.
+timeout: 1800
+gcode:
+      SET_FAN_SPEED FAN=Manual_Exhaust_Fan SPEED=0
+#   A list of G-Code commands to execute on an idle timeout.
+
+
+[gcode_macro PRINT_END]
+gcode:
+  SET_FAN_SPEED FAN=Manual_Exhaust_Fan SPEED=0                 ;METHOD 1 - must indent
+  
+  
