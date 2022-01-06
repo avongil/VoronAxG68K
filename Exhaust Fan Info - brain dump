@@ -1,3 +1,5 @@
+inital brain dump. to convert into a markdown page with pictures soon.
+
 ###METHOD 1 The goal is to have a super simple chamber fan setup and control as well as explain to the new klipper user how to set up the fans initially with the generic_fan
 ###this method turns the fan on at the end of the print and uses the timeout section to automatically turn them off regardless of operating mode.
 
